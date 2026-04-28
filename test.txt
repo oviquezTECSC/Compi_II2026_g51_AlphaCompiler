@@ -1,2 +1,5 @@
-while (x==1) do
-    x:= x + -10 & (x / -y)
+let
+    var x:int;
+    const MAX ~ 1000
+in
+    MAX:=10

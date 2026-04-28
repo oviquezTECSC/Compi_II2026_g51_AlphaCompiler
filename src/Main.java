@@ -2,6 +2,7 @@ import syntaxchecker.AlphaErrorListener;
 import syntaxchecker.generated.*;
 import org.antlr.v4.runtime.*;
 import org.antlr.v4.runtime.tree.*;
+import typechecker.AlphaCompilerTypeChecker;
 
 import java.io.IOException;
 
@@ -29,7 +30,7 @@ public class Main {
             parser.addErrorListener(errors);
 
             // 7️⃣ Llamar regla inicial (CAMBIA por la tuya)
-            parser.program();
+            ParseTree tree = parser.program();
 
             if (errors.hasErrors()){
                 for (String e: errors.getErrorList()) {
@@ -37,7 +38,17 @@ public class Main {
                 }
                 System.out.println("Compilation failed!");
             }else{
-                System.out.println("Compilation succesful!");
+                AlphaCompilerTypeChecker typechecker = new AlphaCompilerTypeChecker();
+                typechecker.visit(tree);
+                if (typechecker.hasErrors()) {
+                    System.out.println("Compilation failed!");
+                    for(String err : typechecker.getErrorList()){
+                        System.out.println(err);
+                    }
+                } else {
+                    //todo: genere código
+                    System.out.println("Compilation succesful!");
+                }
             }
 
         } catch (IOException e) {
